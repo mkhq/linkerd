@@ -3,7 +3,7 @@ package io.buoyant.router
 import com.twitter.finagle.{Http => FinagleHttp, Server => FinagleServer, http => fhttp, _}
 import com.twitter.finagle.client.StackClient
 import com.twitter.finagle.http.{Request, Response, TlsFilter}
-//import com.twitter.finagle.netty4.http.exp.Netty4Impl
+import com.twitter.finagle.netty4.http.exp.Netty4Impl
 import com.twitter.finagle.param.ProtocolLibrary
 import com.twitter.finagle.server.StackServer
 import io.buoyant.router.Http.param.HttpIdentifier
@@ -37,7 +37,7 @@ object Http extends Router[Request, Response] with FinagleServer[Request, Respon
 
     val defaultParams: Stack.Params =
       StackRouter.defaultParams +
-        //Netty4Impl +
+        Netty4Impl +
         FinagleHttp.param.Streaming(true) +
         FinagleHttp.param.Decompression(false) +
         ProtocolLibrary("http")
@@ -74,7 +74,7 @@ object Http extends Router[Request, Response] with FinagleServer[Request, Respon
 
     val defaultParams: Stack.Params =
       StackServer.defaultParams +
-        //Netty4Impl +
+        Netty4Impl +
         FinagleHttp.param.Streaming(true) +
         FinagleHttp.param.Decompression(false) +
         ProtocolLibrary("http")
