@@ -2,7 +2,8 @@ package io.buoyant.linkerd.tracer
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.twitter.finagle.tracing.{Record, TraceId, Tracer}
-import com.twitter.finagle.zipkin.thrift.{Sampler, ZipkinTracer}
+import com.twitter.finagle.zipkin.core.Sampler
+import com.twitter.finagle.zipkin.thrift.ZipkinTracer
 import io.buoyant.linkerd.{TracerConfig, TracerInitializer}
 
 class ZipkinTracerInitializer extends TracerInitializer {

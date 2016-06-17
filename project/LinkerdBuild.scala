@@ -364,7 +364,7 @@ object LinkerdBuild extends Base {
 
     object Tracer {
       val zipkin = projectDir("linkerd/tracer/zipkin")
-        .withTwitterLib(Deps.finagle("zipkin"))
+        .withTwitterLibs(Deps.finagle("zipkin-core"), Deps.finagle("zipkin"))
         .dependsOn(core)
         .withTests()
 
