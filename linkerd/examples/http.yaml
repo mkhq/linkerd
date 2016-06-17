@@ -8,18 +8,31 @@ namers:
 # A simple HTTP router that looks up host header values in io.l5d.fs.
 routers:
 - protocol: http
+  label: netty3
   baseDtab: |
     /srv => /#/io.l5d.fs;
-    /host/gen => /srv;
-    /host/word => /host/default;
-    /http/*/*/* => /host;
+    /host => /srv;
+    /http/1.1/* => /host;
   servers:
-  - port: 4142
+  - port: 4140
+    ip: 0.0.0.0
+    engine:
+      kind: netty3
+  client:
+    engine:
+      kind: netty3
+
+- protocol: http
+  label: netty4
+  baseDtab: |
+    /srv => /#/io.l5d.fs;
+    /host => /srv;
+    /http/1.1/* => /host;
+  servers:
+  - port: 4141
     ip: 0.0.0.0
     engine:
       kind: netty4
-      http2: true
   client:
     engine:
       kind: netty4
-      http2: true
