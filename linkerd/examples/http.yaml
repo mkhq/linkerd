@@ -39,11 +39,11 @@ routers:
 
 - protocol: http
   label: http2
+  identifier:
+    kind: io.l5d.path
   baseDtab: |
     /srv => /#/io.l5d.fs;
-    /host => /srv/default;
-    /host => /srv;
-    /http/1.1/* => /host;
+    /http => /srv;
   servers:
   - port: 4142
     ip: 0.0.0.0
