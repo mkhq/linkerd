@@ -4,7 +4,7 @@ import com.twitter.finagle.Stack
 import com.twitter.finagle.netty4.Netty4Listener
 import com.twitter.finagle.server.Listener
 import io.netty.channel._
-import io.netty.handler.codec.http2.{Http2Frame, Http2MultiplexCodec}
+import io.netty.handler.codec.http2.{Http2Frame, Http2Codec}
 import io.netty.channel.socket.SocketChannel
 
 /**
@@ -22,7 +22,7 @@ object Http2Listener {
   private[this] def mkHttp2(params: Stack.Params): ChannelInitializer[Channel] => ChannelHandler =
     init => new ChannelInitializer[SocketChannel] {
       def initChannel(ch: SocketChannel): Unit = {
-        val _ = ch.pipeline.addLast(new Http2MultiplexCodec(true, init))
+        val _ = ch.pipeline.addLast(new Http2Codec(true, init))
       }
     }
 

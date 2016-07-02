@@ -45,6 +45,12 @@ object LinkerdBuild extends Base {
       .withTests()
       .withE2e()
 
+    val http2 = projectDir("router/http2")
+      .dependsOn(core)
+      .withTwitterLibs(Deps.finagle("http2"))
+      .withTests()
+      .withE2e()
+
     val mux = projectDir("router/mux")
       .dependsOn(core)
       .withTwitterLib(Deps.finagle("mux"))
@@ -492,6 +498,7 @@ object LinkerdBuild extends Base {
   val router = Router.all
   val routerCore = Router.core
   val routerHttp = Router.http
+  val routerHttp2 = Router.http2
   val routerMux = Router.mux
   val routerThrift = Router.thrift
   val routerThriftIdl = Router.thriftIdl
