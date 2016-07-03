@@ -47,7 +47,7 @@ object LinkerdBuild extends Base {
 
     val http2 = projectDir("router/http2")
       .dependsOn(core)
-      .withTwitterLibs(Deps.finagle("http2"))
+      .withTwitterLibs(Deps.finagle("http2"), Deps.twitterServer)
       .withTests()
       .withE2e()
 
