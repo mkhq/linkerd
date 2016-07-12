@@ -24,24 +24,9 @@ object Http2Transporter {
       val _h2 = pipeline.addLast("h2", new Http2FrameCodec(false /*server*/ ))
       // val _h2Debug = pipeline.addLast("h2 debug", new DebugHandler("client[h2]"))
 
-      // val _h2retainer = pipeline.addLast("retainer", new SimpleChannelInboundHandler[Http2StreamFrame] {
-      //   def channelRead0(ctx: ChannelHandlerContext, frame: Http2StreamFrame): Unit =
-      //     frame match {
-      //       case f: Http2DataFrame =>
-      //         val _ = ctx.fireChannelRead(f.retain(2))
-      //       case _ =>
-      //         val _ = ctx.fireChannelRead(frame)
-      //     }
-      // })
-
       // Buffer writes until the channel is marked active (i.e. the
       // protocol has been initialized).
-      val _writeBuffer = pipeline.addLast("buffer", new BufferingChannelOutboundHandler {
-        override def channelActive(ctx: ChannelHandlerContext): Unit = {
-          ctx.pipeline.remove(this)
-          val _ = ctx.fireChannelActive()
-        }
-      })
+      val _writeBuffer = pipeline.addLast("buffer writes until active", new BufferWritesUntilActive)
     }
 
     // Netty4's Http2 Codec doesn't support backpressure yet.
@@ -51,4 +36,12 @@ object Http2Transporter {
     Netty4Transporter(initializer, params)
   }
 
+  private class BufferWritesUntilActive
+    extends ChannelDuplexHandler
+    with BufferingChannelOutboundHandler {
+    override def channelActive(ctx: ChannelHandlerContext): Unit = {
+      ctx.pipeline.remove(this)
+      val _ = ctx.fireChannelActive()
+    }
+  }
 }

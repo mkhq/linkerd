@@ -25,20 +25,21 @@ object Http2Listener {
         // ch.pipeline.addLast("debug.raw", new DebugHandler("srv.raw")).ignoreme
 
         ch.pipeline.addLast("framer", new Http2FrameCodec(true)).ignoreme
-        // ch.pipeline.addLast("debug.frame", new DebugHandler("srv.frame")).ignoreme
+        ch.pipeline.addLast("debug.frame", new DebugHandler("srv.frame")).ignoreme
 
         // If we want to intercept things like Settings messages, this
         // might be a good place to do that.  Eventually, we'll want
         // to surface window settings on streams across clients/servers.
 
         ch.pipeline.addLast("muxer", new Http2MultiplexCodec(true, null, stream)).ignoreme
-        // ch.pipeline.addLast("debug.mux", new DebugHandler("srv.mux")).ignoreme
 
         log.info(s"srv: ${ch} ${ch.pipeline}")
       }
     }
 
-  private[this] val prepareStream: ChannelPipeline => Unit = { _ => }
+  private[this] val prepareStream: ChannelPipeline => Unit = { pipeline =>
+    val _0 = pipeline.addLast(new DebugHandler("srv.stream"))
+  }
 
   def mk(params: Stack.Params): Listener[Http2StreamFrame, Http2StreamFrame] =
     Netty4Listener(
